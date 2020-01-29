@@ -3,7 +3,7 @@ import time
 
 
 # TODO:
-    # Selling function 
+    # Selling function
 
 
 def active_window():
@@ -52,24 +52,31 @@ def platform_loot(): # loots gs1 platform, must have pet out
             player_teleport("left")
         pyautogui.press("w", pause=.5)
 
+        if pyautogui.locateOnScreen("bottom_left.PNG" , region = maple_window_box): #failsafe
+            break
+
     print("Upper left found...")
 
     player_teleport("down")
 
     tries = 0
-    while not pyautogui.locateOnScreen("bottom_left.PNG", region = maple_window_box): #failsafe 1
+    while not pyautogui.locateOnScreen("bottom_left.PNG", region = maple_window_box): #failsafe
         pyautogui.keyDown("left")
         pyautogui.press("w", pause=1)
         tries +=1
 
         if tries > 10:
+            pyautogui.keyUp("left")
             player_teleport("down")
+    if tries > 10:
+        print("Failsafe successful...")
     pyautogui.keyUp("left")
     print("Bottom left found...")
 
     while not pyautogui.locateOnScreen("bottom_right.PNG", region=maple_window_box):
         if pyautogui.locateOnScreen("top_right.PNG", region = maple_window_box):
-            player_teleport("down") #failsafe 2
+            player_teleport("down") #failsafe
+            print("Failsafe successful...")
         for i in range(2):
             player_teleport("right")
         pyautogui.press("w", pause=.5)
@@ -82,7 +89,7 @@ def platform_loot(): # loots gs1 platform, must have pet out
         pyautogui.press("w")
         tries += 1
 
-        if tries > 40:
+        if tries > 25:
             while not pyautogui.locateOnScreen("bottom_right.PNG", region = maple_window_box):
                 player_teleport("right")
             tries = 0
@@ -119,10 +126,10 @@ if __name__ == '__main__':
     start_time = time.time()
     while True: # Main loop
         if loops > 0:
-            if loops % 5 == 0:
+            if loops % 3 == 0:
                 refresh_buffs()
 
-            elif loops % 20 == 0:
+            elif loops % 10 == 0:
                 feed_pet()
 
 
@@ -136,6 +143,7 @@ if __name__ == '__main__':
         platform_loot()
         loops += 1
         print(f"Loops completed: {loops}")
+        print("---------------------------------------------------------")
 
 
 
